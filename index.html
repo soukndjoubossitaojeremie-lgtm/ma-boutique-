@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfums Shop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Josefin+Sans:wght@200;400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #c9a84c;
+      --gold-light: #e8d5a3;
+      --dark: #0e0c0a;
+      --dark2: #1a1713;
+      --dark3: #252118;
+      --cream: #f5f0e8;
+      --text-light: #d4c9b0;
+      --red: #c0392b;
+      --green: #27ae60;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--dark);
+      color: var(--cream);
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 200;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* HEADER */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2rem;
+      background: rgba(14,12,10,0.97);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+    .logo-area { display: flex; align-items: center; gap: 0.8rem; }
+    .logo-area img { height: 44px; width: 44px; object-fit: contain; border-radius: 50%; border: 1px solid var(--gold); }
+    .brand-name { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 300; letter-spacing: 0.15em; color: var(--gold-light); }
+    nav { display: flex; align-items: center; gap: 1.5rem; }
+    nav a { color: var(--text-light); text-decoration: none; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; transition: color 0.3s; cursor: pointer; }
+    nav a:hover { color: var(--gold); }
+    .cart-btn {
+      position: relative; background: none; border: 1px solid var(--gold);
+      color: var(--gold); padding: 0.5rem 1rem;
+      font-family: 'Josefin Sans', sans-serif; font-size: 0.65rem;
+      letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: all 0.3s;
+    }
+    .cart-btn:hover { background: var(--gold); color: var(--dark); }
+    .cart-count {
+      position: absolute; top: -8px; right: -8px;
+      background: var(--red); color: #fff; border-radius: 50%;
+      width: 18px; height: 18px; font-size: 0.6rem;
+      display: flex; align-items: center; justify-content: center; font-weight: 600;
+    }
+    .cart-count.hidden { display: none; }
+
+    /* PAGES */
+    .page { display: none; padding-top: 70px; min-height: 100vh; }
+    .page.active { display: block; }
+
+    /* HERO */
+    .hero {
+      min-height: calc(100vh - 70px);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 4rem 2rem;
+      background: radial-gradient(ellipse at 50% 40%, #2a2010 0%, var(--dark) 70%);
+      position: relative;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23c9a84c' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-tag { font-size: 0.65rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; animation: fadeUp 0.8s ease both; }
+    .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(3rem, 10vw, 6rem); font-weight: 300; line-height: 1.05; color: var(--cream); animation: fadeUp 0.8s 0.2s ease both; }
+    .hero h1 em { font-style: italic; color: var(--gold-light); }
+    .hero-sub { margin-top: 1.5rem; font-size: 0.8rem; letter-spacing: 0.2em; color: var(--text-light); max-width: 420px; line-height: 1.8; animation: fadeUp 0.8s 0.4s ease both; }
+    .hero-cta {
+      margin-top: 2.5rem; display: inline-block; padding: 0.8rem 2.5rem;
+      border: 1px solid var(--gold); color: var(--gold); text-decoration: none;
+      font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+      transition: all 0.3s; animation: fadeUp 0.8s 0.6s ease both;
+      cursor: pointer; background: none; font-family: 'Josefin Sans', sans-serif;
+    }
+    .hero-cta:hover { background: var(--gold); color: var(--dark); }
+
+    /* SECTION HEADER */
+    .section-header { text-align: center; padding: 4rem 2rem 2.5rem; }
+    .section-tag { font-size: 0.6rem; letter-spacing: 0.5em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 0.8rem; }
+    .section-header h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 300; color: var(--cream); }
+    .gold-line { width: 60px; height: 1px; background: var(--gold); margin: 1.2rem auto 0; }
+
+    /* PRODUITS */
+    .products { padding: 1rem 2rem 5rem; max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 2rem; }
+    .card { background: var(--dark2); border: 1px solid rgba(201,168,76,0.15); position: relative; overflow: hidden; transition: transform 0.4s, border-color 0.4s; }
+    .card:hover { transform: translateY(-6px); border-color: rgba(201,168,76,0.5); }
+    .card-badge { position: absolute; top: 1rem; right: 1rem; background: var(--gold); color: var(--dark); font-size: 0.6rem; letter-spacing: 0.2em; padding: 0.3rem 0.7rem; text-transform: uppercase; font-weight: 600; }
+    .card-img-wrap { overflow: hidden; }
+    .card-img { width: 100%; height: 260px; object-fit: cover; display: block; filter: brightness(0.9); transition: filter 0.4s, transform 0.4s; }
+    .card:hover .card-img { filter: brightness(1); transform: scale(1.03); }
+    .card-body { padding: 1.4rem; }
+    .card-number { font-size: 0.6rem; letter-spacing: 0.4em; color: var(--gold); margin-bottom: 0.4rem; }
+    .card-name { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 300; color: var(--cream); margin-bottom: 0.5rem; }
+    .card-desc { font-size: 0.73rem; line-height: 1.8; color: var(--text-light); margin-bottom: 1.3rem; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(201,168,76,0.15); padding-top: 1rem; }
+    .card-price { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--gold-light); font-weight: 300; }
+    .btn-add { background: transparent; border: 1px solid var(--gold); color: var(--gold); font-family: 'Josefin Sans', sans-serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.6rem 1rem; cursor: pointer; transition: all 0.3s; }
+    .btn-add:hover { background: var(--gold); color: var(--dark); }
+
+    /* LIVRAISON */
+    .livraison-banner { background: var(--dark3); border-top: 1px solid rgba(201,168,76,0.2); border-bottom: 1px solid rgba(201,168,76,0.2); padding: 3rem 2rem; }
+    .livraison-banner h2 { font-family: 'Cormorant Garamond', serif; text-align: center; font-size: 2rem; font-weight: 300; color: var(--gold-light); margin-bottom: 2rem; }
+    .livraison-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; max-width: 900px; margin: 0 auto; }
+    .livraison-item { text-align: center; padding: 1.5rem 1rem; border: 1px solid rgba(201,168,76,0.15); background: var(--dark2); }
+    .livraison-icon { font-size: 2rem; margin-bottom: 0.8rem; }
+    .livraison-item h3 { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+    .livraison-item p { font-size: 0.72rem; color: var(--text-light); line-height: 1.7; }
+
+    /* PANIER */
+    .cart-page { max-width: 800px; margin: 0 auto; padding: 2rem; }
+    .cart-page h2 { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 300; color: var(--gold-light); margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(201,168,76,0.2); }
+    .cart-empty { text-align: center; padding: 4rem 2rem; color: var(--text-light); font-size: 0.9rem; letter-spacing: 0.1em; }
+    .cart-empty span { font-size: 3rem; display: block; margin-bottom: 1rem; }
+    .cart-item { display: flex; gap: 1rem; align-items: center; padding: 1rem 0; border-bottom: 1px solid rgba(201,168,76,0.1); }
+    .cart-item img { width: 70px; height: 70px; object-fit: cover; border: 1px solid rgba(201,168,76,0.2); flex-shrink: 0; }
+    .cart-item-info { flex: 1; }
+    .cart-item-name { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--cream); margin-bottom: 0.3rem; }
+    .cart-item-price { font-size: 0.75rem; color: var(--gold); letter-spacing: 0.1em; }
+    .cart-item-qty { display: flex; align-items: center; gap: 0.5rem; }
+    .qty-btn { width: 28px; height: 28px; background: none; border: 1px solid rgba(201,168,76,0.3); color: var(--gold); cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .qty-btn:hover { background: var(--gold); color: var(--dark); }
+    .qty-num { font-size: 0.85rem; min-width: 20px; text-align: center; }
+    .remove-btn { background: none; border: none; color: #666; cursor: pointer; font-size: 1.1rem; transition: color 0.2s; padding: 0.3rem; }
+    .remove-btn:hover { color: var(--red); }
+    .frais-livraison { display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 0.72rem; color: var(--text-light); border-bottom: 1px solid rgba(201,168,76,0.1); }
+    .cart-total { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 0; }
+    .cart-total-label { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-light); }
+    .cart-total-amount { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--gold-light); }
+    .btn-checkout { width: 100%; padding: 1rem; background: var(--gold); color: var(--dark); border: none; font-family: 'Josefin Sans', sans-serif; font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; margin-top: 1.5rem; font-weight: 600; }
+    .btn-checkout:hover { background: var(--gold-light); }
+    .btn-back { background: none; border: 1px solid rgba(201,168,76,0.3); color: var(--text-light); font-family: 'Josefin Sans', sans-serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.7rem 1.5rem; cursor: pointer; transition: all 0.3s; margin-top: 0.8rem; width: 100%; }
+    .btn-back:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* COMMANDE */
+    .commande-page { max-width: 700px; margin: 0 auto; padding: 2rem; }
+    .commande-page h2 { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 300; color: var(--gold-light); margin-bottom: 0.5rem; }
+    .subtitle { font-size: 0.7rem; letter-spacing: 0.2em; color: var(--text-light); margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(201,168,76,0.2); }
+    .form-section-title { font-size: 0.65rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin: 1.8rem 0 1rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-light); margin-bottom: 0.4rem; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.8rem 1rem; background: var(--dark2); border: 1px solid rgba(201,168,76,0.2); color: var(--cream); font-family: 'Josefin Sans', sans-serif; font-size: 0.8rem; outline: none; transition: border-color 0.3s; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); }
+    .form-group select option { background: var(--dark2); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .order-summary { background: var(--dark2); border: 1px solid rgba(201,168,76,0.15); padding: 1.5rem; margin: 1.5rem 0; }
+    .order-summary h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--gold-light); margin-bottom: 1rem; padding-bottom: 0.8rem; border-bottom: 1px solid rgba(201,168,76,0.15); }
+    .order-line { display: flex; justify-content: space-between; font-size: 0.73rem; padding: 0.4rem 0; color: var(--text-light); }
+    .order-line.total { border-top: 1px solid rgba(201,168,76,0.2); margin-top: 0.5rem; padding-top: 0.8rem; color: var(--gold-light); font-weight: 600; font-size: 0.85rem; }
+    .btn-confirm { width: 100%; padding: 1.1rem; background: var(--gold); color: var(--dark); border: none; font-family: 'Josefin Sans', sans-serif; font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; font-weight: 600; margin-top: 1rem; }
+    .btn-confirm:hover { background: var(--gold-light); }
+
+    /* CONFIRMATION */
+    .confirmation { text-align: center; padding: 5rem 2rem; max-width: 600px; margin: 0 auto; }
+    .confirmation .check { font-size: 4rem; margin-bottom: 1.5rem; }
+    .confirmation h2 { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 300; color: var(--gold-light); margin-bottom: 1rem; }
+    .confirmation p { font-size: 0.8rem; color: var(--text-light); line-height: 1.8; }
+    .order-id { display: inline-block; margin: 1.5rem 0; padding: 0.8rem 2rem; border: 1px solid var(--gold); color: var(--gold); font-size: 0.75rem; letter-spacing: 0.3em; }
+
+    /* CONTACT */
+    .contact-page { max-width: 900px; margin: 0 auto; padding: 2rem 2rem 5rem; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
+    .contact-info { display: flex; flex-direction: column; gap: 1.2rem; }
+    .contact-card { background: var(--dark2); border: 1px solid rgba(201,168,76,0.15); padding: 1.3rem; }
+    .contact-card .icon { font-size: 1.4rem; margin-bottom: 0.6rem; }
+    .contact-card h3 { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+    .contact-card p, .contact-card a { font-size: 0.82rem; color: var(--text-light); line-height: 1.7; text-decoration: none; }
+    .contact-card a:hover { color: var(--gold); }
+    .contact-form-wrap { background: var(--dark2); border: 1px solid rgba(201,168,76,0.15); padding: 2rem; }
+    .contact-form-wrap h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 300; color: var(--cream); margin-bottom: 1.5rem; }
+    .btn-send { width: 100%; padding: 0.9rem; background: var(--gold); color: var(--dark); border: none; font-family: 'Josefin Sans', sans-serif; font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; font-weight: 600; margin-top: 0.5rem; }
+    .btn-send:hover { background: var(--gold-light); }
+
+    /* FOOTER */
+    footer { background: var(--dark2); border-top: 1px solid rgba(201,168,76,0.15); text-align: center; padding: 3rem 2rem; }
+    .footer-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; color: var(--gold-light); letter-spacing: 0.2em; margin-bottom: 0.5rem; }
+    .footer-tagline { font-size: 0.65rem; letter-spacing: 0.3em; color: var(--text-light); margin-bottom: 1.5rem; }
+    .footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .footer-links a { font-size: 0.65rem; letter-spacing: 0.2em; color: var(--text-light); text-decoration: none; text-transform: uppercase; cursor: pointer; }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-copy { font-size: 0.65rem; color: #555; }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--gold); color: var(--dark); padding: 0.8rem 2rem; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600; transition: transform 0.4s ease; z-index: 999; pointer-events: none; white-space: nowrap; }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 640px) {
+      header { padding: 0.8rem 1rem; }
+      .brand-name { font-size: 1rem; }
+      nav a { display: none; }
+      .products { grid-template-columns: 1fr; padding: 1rem; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .cart-page, .commande-page, .contact-page { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">
+    <img src="logo.jpeg" alt="Perfums Shop">
+    <span class="brand-name">Perfums Shop</span>
+  </div>
+  <nav>
+    <a onclick="showPage('home')">Accueil</a>
+    <a onclick="showPage('home'); setTimeout(()=>document.getElementById('collection').scrollIntoView({behavior:'smooth'}),100)">Collection</a>
+    <a onclick="showPage('contact')">Contact</a>
+    <button class="cart-btn" onclick="showPage('cart')">
+      🛒 Panier
+      <span class="cart-count hidden" id="cartCount">0</span>
+    </button>
+  </nav>
+</header>
+
+<!-- PAGE ACCUEIL -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <p class="hero-tag">Maison de Parfums — Collection Exclusive</p>
+    <h1>L'Art du<br><em>Parfum</em></h1>
+    <p class="hero-sub">Des fragrances d'exception, soigneusement sélectionnées pour sublimer chaque instant.</p>
+    <button class="hero-cta" onclick="document.getElementById('collection').scrollIntoView({behavior:'smooth'})">Découvrir la collection</button>
+  </section>
+
+  <section id="collection">
+    <div class="section-header">
+      <span class="section-tag">Notre Sélection</span>
+      <h2>Collection Signature</h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="products">
+      <div class="card">
+        <span class="card-badge">Bestseller</span>
+        <div class="card-img-wrap"><img src="article1.jpg" alt="Versace Bright Crystal" class="card-img"></div>
+        <div class="card-body">
+          <p class="card-number">No. 01</p>
+          <h3 class="card-name">Versace Bright Crystal</h3>
+          <p class="card-desc">Eau de toilette florale et fruitée. Notes de grenade, pivoine et magnolia pour une féminité lumineuse et élégante.</p>
+          <div class="card-footer">
+            <span class="card-price">15 000 F</span>
+            <button class="btn-add" onclick="addToCart({id:1,name:'Versace Bright Crystal',price:15000,img:'article1.jpg'})">+ Panier</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <span class="card-badge">Nouveau</span>
+        <div class="card-img-wrap"><img src="article2.jpg" alt="Chanel Bleu" class="card-img"></div>
+        <div class="card-body">
+          <p class="card-number">No. 02</p>
+          <h3 class="card-name">Chanel Bleu</h3>
+          <p class="card-desc">Bois aromatique intense et profond. Notes d'agrumes, gingembre et cèdre pour un homme libre et déterminé.</p>
+          <div class="card-footer">
+            <span class="card-price">22 000 F</span>
+            <button class="btn-add" onclick="addToCart({id:2,name:'Chanel Bleu',price:22000,img:'article2.jpg'})">+ Panier</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img-wrap"><img src="article3.jpg" alt="Dior Miss Dior" class="card-img"></div>
+        <div class="card-body">
+          <p class="card-number">No. 03</p>
+          <h3 class="card-name">Dior Miss Dior</h3>
+          <p class="card-desc">La quintessence de la féminité Dior. Bouquet de roses fraîches, musc blanc et patchouli délicat.</p>
+          <div class="card-footer">
+            <span class="card-price">18 500 F</span>
+            <button class="btn-add" onclick="addToCart({id:3,name:'Dior Miss Dior',price:18500,img:'article3.jpg'})">+ Panier</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="livraison-banner">
+    <h2>🚚 E-Logistique — Livraison au Cameroun</h2>
+    <div class="livraison-grid">
+      <div class="livraison-item">
+        <div class="livraison-icon">📦</div>
+        <h3>Commande en ligne</h3>
+        <p>Passez votre commande 24h/24. Confirmation immédiate par SMS ou WhatsApp.</p>
+      </div>
+      <div class="livraison-item">
+        <div class="livraison-icon">🗺️</div>
+        <h3>Livraison nationale</h3>
+        <p>Partout au Cameroun : Yaoundé, Douala, Bafoussam, Garoua et toutes les régions.</p>
+      </div>
+      <div class="livraison-item">
+        <div class="livraison-icon">⏱️</div>
+        <h3>Délais de livraison</h3>
+        <p>Yaoundé & Douala : 24–48h.<br>Autres villes : 2–5 jours ouvrables.</p>
+      </div>
+      <div class="livraison-item">
+        <div class="livraison-icon">💳</div>
+        <h3>Paiement à la livraison</h3>
+        <p>Payez en espèces ou via Mobile Money (MTN, Orange) à la réception.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-brand">Perfums Shop</div>
+    <p class="footer-tagline">L'élégance à portée de main</p>
+    <div class="footer-links">
+      <a onclick="showPage('home')">Accueil</a>
+      <a onclick="showPage('cart')">Panier</a>
+      <a onclick="showPage('contact')">Contact</a>
+    </div>
+    <p class="footer-copy">© 2026 Perfums Shop — Tous droits réservés</p>
+  </footer>
+</div>
+
+<!-- PAGE PANIER -->
+<div class="page" id="page-cart">
+  <div class="cart-page">
+    <h2>Mon Panier</h2>
+    <div id="cartContent"></div>
+    <button class="btn-back" onclick="showPage('home')">← Continuer mes achats</button>
+  </div>
+</div>
+
+<!-- PAGE COMMANDE -->
+<div class="page" id="page-commande">
+  <div class="commande-page">
+    <h2>Finaliser la commande</h2>
+    <p class="subtitle">Livraison partout au Cameroun · Paiement à la livraison</p>
+
+    <p class="form-section-title">Vos informations</p>
+    <div class="form-group">
+      <label>Nom complet *</label>
+      <input type="text" id="nom" placeholder="Ex: Jean Dupont">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Téléphone / WhatsApp *</label>
+        <input type="tel" id="tel" placeholder="6XX XXX XXX">
+      </div>
+      <div class="form-group">
+        <label>Email (optionnel)</label>
+        <input type="email" id="email" placeholder="votre@email.com">
+      </div>
+    </div>
+
+    <p class="form-section-title">Adresse de livraison</p>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Ville *</label>
+        <select id="ville" onchange="renderOrderSummary()">
+          <option value="">Sélectionner...</option>
+          <option>Yaoundé</option><option>Douala</option><option>Bafoussam</option>
+          <option>Garoua</option><option>Maroua</option><option>Ngaoundéré</option>
+          <option>Bertoua</option><option>Ebolowa</option><option>Bamenda</option>
+          <option>Buea</option><option>Autre</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Quartier *</label>
+        <input type="text" id="quartier" placeholder="Ex: Bastos, Akwa...">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Adresse précise / Point de repère</label>
+      <textarea id="adresse" rows="2" placeholder="Ex: Rue de l'église, face au marché..."></textarea>
+    </div>
+
+    <p class="form-section-title">Récapitulatif</p>
+    <div class="order-summary" id="orderSummary"></div>
+
+    <button class="btn-confirm" onclick="confirmerCommande()">✓ Confirmer la commande</button>
+    <button class="btn-back" onclick="showPage('cart')" style="margin-top:0.8rem">← Retour au panier</button>
+  </div>
+</div>
+
+<!-- PAGE CONFIRMATION -->
+<div class="page" id="page-confirmation">
+  <div class="confirmation">
+    <div class="check">✅</div>
+    <h2>Commande confirmée !</h2>
+    <p>Merci pour votre commande. Nous vous contacterons très prochainement pour organiser la livraison.</p>
+    <p style="margin-top:0.5rem">Votre numéro de commande :</p>
+    <div class="order-id" id="orderId">#PS-000000</div>
+    <p>📱 Un message de confirmation vous sera envoyé sur WhatsApp.</p>
+    <p style="margin-top:1rem; color:var(--gold)">Paiement : à la livraison (espèces ou Mobile Money)</p>
+    <button class="btn-back" onclick="showPage('home')" style="margin-top:2rem;width:auto;display:inline-block;padding:0.8rem 2rem">← Retour à la boutique</button>
+  </div>
+</div>
+
+<!-- PAGE CONTACT -->
+<div class="page" id="page-contact">
+  <div class="contact-page">
+    <div class="section-header" style="padding-top:2rem">
+      <span class="section-tag">Nous joindre</span>
+      <h2>Contact</h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="contact-card">
+          <div class="icon">📱</div>
+          <h3>WhatsApp / Téléphone</h3>
+          <p><a href="tel:+237690123456">+237 690 123 456</a></p>
+          <p style="margin-top:0.3rem;font-size:0.7rem">Disponible 7j/7 de 8h à 20h</p>
+        </div>
+        <div class="contact-card">
+          <div class="icon">📧</div>
+          <h3>Email</h3>
+          <p><a href="mailto:contact@perfumsshop.cm">contact@perfumsshop.cm</a></p>
+          <p style="margin-top:0.3rem;font-size:0.7rem">Réponse sous 24h</p>
+        </div>
+        <div class="contact-card">
+          <div class="icon">📍</div>
+          <h3>Localisation</h3>
+          <p>Yaoundé, Cameroun</p>
+          <p style="margin-top:0.3rem;font-size:0.7rem">Livraison dans tout le Cameroun</p>
+        </div>
+        <div class="contact-card">
+          <div class="icon">🕐</div>
+          <h3>Horaires</h3>
+          <p>Lun – Ven : 8h – 19h</p>
+          <p>Samedi : 9h – 17h</p>
+          <p>Dimanche : 10h – 14h</p>
+        </div>
+      </div>
+      <div class="contact-form-wrap">
+        <h3>Envoyer un message</h3>
+        <div class="form-group"><label>Nom</label><input type="text" placeholder="Votre nom"></div>
+        <div class="form-group"><label>Téléphone / Email</label><input type="text" placeholder="+237 6XX XXX XXX"></div>
+        <div class="form-group">
+          <label>Sujet</label>
+          <select><option>Renseignement produit</option><option>Suivi de commande</option><option>Livraison</option><option>Autre</option></select>
+        </div>
+        <div class="form-group"><label>Message</label><textarea rows="5" placeholder="Votre message..."></textarea></div>
+        <button class="btn-send" onclick="showToast('Message envoyé ! Nous vous répondrons rapidement ✓')">Envoyer le message</button>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-brand">Perfums Shop</div>
+    <p class="footer-tagline">L'élégance à portée de main</p>
+    <div class="footer-links">
+      <a onclick="showPage('home')">Accueil</a>
+      <a onclick="showPage('cart')">Panier</a>
+      <a onclick="showPage('contact')">Contact</a>
+    </div>
+    <p class="footer-copy">© 2026 Perfums Shop — Tous droits réservés</p>
+  </footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  let cart = [];
+
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    window.scrollTo(0, 0);
+    if (name === 'cart') renderCart();
+    if (name === 'commande') renderOrderSummary();
+  }
+
+  function addToCart(product) {
+    const existing = cart.find(i => i.id === product.id);
+    if (existing) existing.qty++;
+    else cart.push({ ...product, qty: 1 });
+    updateCartCount();
+    showToast(product.name + ' ajouté au panier ✓');
+  }
+
+  function updateCartCount() {
+    const total = cart.reduce((s, i) => s + i.qty, 0);
+    const el = document.getElementById('cartCount');
+    el.textContent = total;
+    el.classList.toggle('hidden', total === 0);
+  }
+
+  function changeQty(id, delta) {
+    const item = cart.find(i => i.id === id);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+    updateCartCount();
+    renderCart();
+  }
+
+  function removeItem(id) {
+    cart = cart.filter(i => i.id !== id);
+    updateCartCount();
+    renderCart();
+  }
+
+  function getTotal() { return cart.reduce((s, i) => s + i.price * i.qty, 0); }
+
+  function fraisLivraison() {
+    const v = document.getElementById('ville') ? document.getElementById('ville').value : '';
+    if (v === 'Yaoundé' || v === 'Douala') return 1500;
+    if (v === '') return 2000;
+    return 3000;
+  }
+
+  function renderCart() {
+    const el = document.getElementById('cartContent');
+    if (cart.length === 0) {
+      el.innerHTML = `<div class="cart-empty"><span>🛒</span>Votre panier est vide.<br>Découvrez notre collection !</div>`;
+      return;
+    }
+    const frais = 2000;
+    const total = getTotal();
+    let html = cart.map(item => `
+      <div class="cart-item">
+        <img src="${item.img}" alt="${item.name}">
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-price">${item.price.toLocaleString('fr-FR')} F × ${item.qty} = ${(item.price * item.qty).toLocaleString('fr-FR')} F</div>
+        </div>
+        <div class="cart-item-qty">
+          <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+        </div>
+        <button class="remove-btn" onclick="removeItem(${item.id})">✕</button>
+      </div>`).join('');
+    html += `
+      <div class="frais-livraison"><span>Sous-total</span><span>${total.toLocaleString('fr-FR')} F</span></div>
+      <div class="frais-livraison"><span>Frais de livraison (estimés)</span><span>~${frais.toLocaleString('fr-FR')} F</span></div>
+      <div class="cart-total">
+        <span class="cart-total-label">Total estimé</span>
+        <span class="cart-total-amount">${(total + frais).toLocaleString('fr-FR')} F</span>
+      </div>
+      <button class="btn-checkout" onclick="showPage('commande')">Commander maintenant →</button>`;
+    el.innerHTML = html;
+  }
+
+  function renderOrderSummary() {
+    const frais = fraisLivraison();
+    const total = getTotal();
+    let html = '<h3>Récapitulatif</h3>';
+    html += cart.map(i => `<div class="order-line"><span>${i.name} × ${i.qty}</span><span>${(i.price*i.qty).toLocaleString('fr-FR')} F</span></div>`).join('');
+    html += `<div class="order-line"><span>Frais de livraison</span><span>${frais.toLocaleString('fr-FR')} F</span></div>`;
+    html += `<div class="order-line total"><span>TOTAL</span><span>${(total+frais).toLocaleString('fr-FR')} F</span></div>`;
+    document.getElementById('orderSummary').innerHTML = html;
+  }
+
+  function confirmerCommande() {
+    const nom = document.getElementById('nom').value.trim();
+    const tel = document.getElementById('tel').value.trim();
+    const ville = document.getElementById('ville').value;
+    const quartier = document.getElementById('quartier').value.trim();
+    if (!nom || !tel || !ville || !quartier) { showToast('⚠ Veuillez remplir tous les champs obligatoires'); return; }
+    if (cart.length === 0) { showToast('Votre panier est vide'); return; }
+    document.getElementById('orderId').textContent = '#PS-' + Date.now().toString().slice(-6);
+    cart = [];
+    updateCartCount();
+    showPage('confirmation');
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+</script>
+</body>
+</html>
